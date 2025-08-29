@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parking Slot Booking</title>
+  <style>
+    /* General Styling */
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      min-height: 100vh;
+      background-color: #f4f6f8;
+    }
+
+    .container {
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+      text-align: center;
+    }
+
+    .slots-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr); /* Adjusted to 2 columns for 4 slots */
+      gap: 20px; /* Increased gap for better spacing */
+      justify-items: center;
+      margin-top: 20px;
+    }
+
+    .slot {
+      width: 120px; /* Increased width */
+      height: 120px; /* Increased height */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px; /* Slightly rounded corners */
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 20px; /* Increased font size */
+      color: #ffffff;
+      transition: background-color 0.3s;
+      background-color: #28a745;
+    }
+
+    .slot.selected {
+      background-color: #ffc107;
+    }
+
+    .slot.occupied {
+      background-color: #dc3545;
+      cursor: not-allowed;
+    }
+
+    .otp-section, .timer-section {
+      margin-top: 30px;
+      display: none;
+    }
+
+    .otp-section.active, .timer-section.active {
+      display: block;
+    }
+
+    .otp-display {
+      margin: 20px 0;
+      font-size: 20px;
+      font-weight: bold;
+      color: #004aad;
+    }
+
+    .btn {
+      background-color: #004aad;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #003580;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Select a Parking Slot</h1>
+    <div class="slots-grid">
+      <div class="slot available" data-slot="1" onclick="selectSlot(this)">1</div>
+      <div class="slot available" data-slot="2" onclick="selectSlot(this)">2</div>
+      <div class="slot available" data-slot="3" onclick="selectSlot(this)">3</div>
+      <div class="slot available" data-slot="4" onclick="selectSlot(this)">4</div>
+    </div>
+
+    <div class="otp-section">
+      <p class="otp-display">Booking ID: <span id="otp-display"></span></p>
+    </div>
+
+    <div class="timer-section">
+      <h2>Parking in Progress</h2>
+      <p>Timer: <span id="timer">0:00</span></p>
+      <button class="btn" onclick="endParking()">End</button>
+    </div>
+
+    <div id="result-section"></div>
+  </div>
+
+  <script>
+    let selectedSlot = null;
+    let generatedOtp = null;
+    let timerInterval = null;
+    let startTime = null;
+
+    function selectSlot(slot) {
+      if (selectedSlot) {
+        alert("You can select only one slot at a time.");
+        return;
+      }
+
+      // Mark the slot as selected
+      slot.classList.add("selected");
+      selectedSlot = slot.dataset.slot;
+
+      // Generate and display OTP
+      generatedOtp = Math.floor(1000 + Math.random() * 9000);
+      document.getElementById("otp-display").textContent = generatedOtp;
+
+      // Show OTP and start the timer
+      document.querySelector(".otp-section").classList.add("active");
+      document.querySelector(".timer-section").classList.add("active");
+      startTimer();
+    }
+
+    function startTimer() {
+      const timerElement = document.getElementById("timer");
+      let seconds = 0;
+
+      startTime = new Date();
+
+      timerInterval = setInterval(() => {
+        seconds++;
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        timerElement.textContent = `${mins}:${secs.toString().padStart(2, "0")}`;
+      }, 1000);
+    }
+
+    function endParking() {
+      clearInterval(timerInterval);
+
+      const endTime = new Date();
+      const elapsedTime = Math.floor((endTime - startTime) / 1000); // in seconds
+      const totalMinutes = elapsedTime / 60; // Fractional minutes
+      const cost = (totalMinutes * 2).toFixed(2); // Proportional cost
+
+      document.getElementById("result-section").innerHTML = `
+        <h2>Parking Ended</h2>
+        <p><strong>Total Time:</strong> ${elapsedTime} second(s)</p>
+        <p><strong>Total Cost:</strong> ₹${cost}</p>
+      `;
+
+      document.querySelector(".timer-section").classList.remove("active");
+    }
+  </script>
+</body>
+</html>

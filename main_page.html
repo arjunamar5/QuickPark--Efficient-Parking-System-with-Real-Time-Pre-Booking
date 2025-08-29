@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Parking System</title>
+  <link rel="stylesheet" href="main_page.css"/>
+  <style></style>
+</head>
+<body>
+<div class="main-container">
+  <!-- Left box with GIF background covering half of the page -->
+  <div class="left-box"></div>
+
+  <!-- Right box with login content covering the other half -->
+  <div class="right-box">
+    <div class="login-container">
+      <header class="header">
+        <h1>Welcome to Smart Parking System</h1>
+        <p>Your solution for hassle-free parking reservations and navigation</p>
+      </header>
+      <form action="login.php" method="POST" class="login-form">
+        <label for="login">Login:</label>
+        <input type="text" id="login" name="login" placeholder="Enter your username" required>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="pwd" placeholder="Enter your password" required>
+
+        <button type="submit" class="register-button">Login</button>
+        
+      </form>
+      
+      <div class="create-account">
+        <p>Dont't have an account? <a href="registration.html" class="register-link">Sign Up</a></p>
+    </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
